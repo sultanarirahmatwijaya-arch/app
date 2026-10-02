@@ -1,0 +1,167 @@
+{
+  "app_name": "MenAbng",
+  "personality": "8 Hand-Drawn / Journal LIGHT (with Sage Natural custom palette)",
+  "personality_one_liner": "A calm, minimalist couple savings ledger featuring warm cream surfaces, soft sage green accents, and a tactile register feel.",
+  "color": {
+    "surface": "#FDFCF8",
+    "onSurface": "#2C3028",
+    "surfaceSecondary": "#F4F3EE",
+    "onSurfaceSecondary": "#42473D",
+    "surfaceTertiary": "#EAE8E0",
+    "onSurfaceTertiary": "#5A6152",
+    "surfaceInverse": "#2C3028",
+    "onSurfaceInverse": "#FDFCF8",
+    "brand": "#8A9A68",
+    "brandPrimary": "#728153",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#9BB07A",
+    "onBrandSecondary": "#2C3028",
+    "brandTertiary": "#E5EADF",
+    "onBrandTertiary": "#42473D",
+    "success": "#6B8E55",
+    "onSuccess": "#FFFFFF",
+    "warning": "#C29B38",
+    "onWarning": "#FFFFFF",
+    "error": "#B85C50",
+    "onError": "#FFFFFF",
+    "info": "#68849A",
+    "onInfo": "#FFFFFF",
+    "border": "#E2E0D5",
+    "borderStrong": "#C8C4B5",
+    "divider": "#EBE8DF",
+    "muted": "#7A8073",
+    "onBrand": "#FFFFFF"
+  },
+  "typography": {
+    "displayFontFamily": "Fraunces",
+    "textFontFamily": "Plus Jakarta Sans",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Generous organic rhythm with tactile rounded cards and comfortable vertical padding",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 8,
+    "md": 14,
+    "lg": 22,
+    "pill": 999
+  },
+  "shadow_tier": "1",
+  "navigation": "bottom_tabs",
+  "icon_set": "Phosphor",
+  "glassmorphism": {
+    "enabled": false,
+    "do's": [
+      "Use warm cream and sage tonal cards",
+      "Maintain clear ledger typography alignment"
+    ],
+    "dont's": [
+      "Avoid harsh black shadows",
+      "Avoid glossy glass over pastel cream"
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-blur",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Auth",
+      "purpose": "Secure couple sign in and account registration with warm paper styling.",
+      "states": {
+        "loading": "Centered sage spinner on cream canvas",
+        "empty": "Clean entry form with dual user avatars",
+        "error": "Inline gentle error banner with clear retry action"
+      },
+      "layout": "Centered clean vertical stack with warm cream background, custom dual-user header, and secure username/password inputs."
+    },
+    {
+      "name": "Home",
+      "purpose": "Overview of joint savings, today's cash flow, and quick access to couple ledgers.",
+      "states": {
+        "loading": "Skeleton card pulse in sage tones",
+        "empty": "Warm illustrated empty state inviting first shared saving entry",
+        "error": "Connection retry prompt with offline sync indicator"
+      },
+      "layout": "Vertical scroll with top couple profile summary card, shared savings progress bar, quick action pills, and daily ledger list."
+    },
+    {
+      "name": "Cashier",
+      "purpose": "Fast cash in/out recording with large keypad, category selection, and instant save.",
+      "states": {
+        "loading": "Ready state keypad interactive immediately",
+        "empty": "Select transaction type (In/Out) to begin entering amount",
+        "error": "Amount validation prompt with haptic tap feedback"
+      },
+      "layout": "Header amount display, category selector pills, and responsive large-number cashier keypad fixed above bottom navigation."
+    },
+    {
+      "name": "MonthlyPlanner",
+      "purpose": "Manage monthly household shopping items and budget items (e.g. rice, soap for Oct 2026).",
+      "states": {
+        "loading": "Skeleton list items for shopping categories",
+        "empty": "Add first shopping item for the upcoming month",
+        "error": "Failed to update monthly plan, tap to sync"
+      },
+      "layout": "Month selector header, budget summary card, category breakdown, and checklist of monthly household essentials with status toggles."
+    },
+    {
+      "name": "LedgerDocs",
+      "purpose": "Documentation and receipts of where money came in and went out across manual bank accounts.",
+      "states": {
+        "loading": "Loading transaction history and receipts",
+        "empty": "No transaction receipts recorded yet",
+        "error": "Unable to load documentation archive"
+      },
+      "layout": "Filter tabs (All / In / Out / Bank), searchable list of transaction cards with category icons, photo receipt thumbnails, and source bank tags."
+    },
+    {
+      "name": "BankAccounts",
+      "purpose": "Manual bank account management and Google Drive backup rekap.",
+      "states": {
+        "loading": "Fetching manual account balances",
+        "empty": "Add your first manual bank or cash wallet",
+        "error": "Backup synchronization error"
+      },
+      "layout": "List of connected manual bank accounts with current balances, Add Account button, and Google Drive backup synchronization card."
+    },
+    {
+      "name": "Profile",
+      "purpose": "Manage couple profile photos, partner link, and app preferences.",
+      "states": {
+        "loading": "Loading profile details",
+        "empty": "Set up your couple profile",
+        "error": "Failed to save profile changes"
+      },
+      "layout": "Dual circular avatar editor, couple name settings, theme preferences, and data backup options."
+    }
+  ],
+  "images": {
+    "hero_couple": {
+      "url": "https://images.unsplash.com/photo-1643569556871-91ec60671ed7",
+      "alt": "Minimalist ceramic aesthetic representing calm couple savings"
+    }
+  },
+  "instructions_to_main_agent": "Implement MenAbng using Expo React Native with the Sage Natural color palette (#FDFCF8 cream base, #8A9A68 sage green accents, #2C3028 dark ink text). Ensure all cashier keypad interactions trigger subtle haptics. Follow the Journal/Hand-Drawn organic radii (md=14, lg=22) and keep typography clean with Plus Jakarta Sans and Fraunces."
+}
