@@ -141,6 +141,8 @@ export default function CatatScreen() {
       queryClient.invalidateQueries({ queryKey: ["summary"] });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      queryClient.invalidateQueries({ queryKey: ["goal"] });
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
       toast.show(mode === "in" ? "Uang masuk tercatat" : "Uang keluar tercatat");
       router.back();
     },

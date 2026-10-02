@@ -1,0 +1,54 @@
+{
+  "summary": "Iteration 2 (Rekap/Grafik, Target Tabungan, PDF rekap) fully validated. Backend: 18/18 new pytest cases pass (6-month stats window with correct income/expense sums per month, categories pct ~100, month_in/out/avg; goal CRUD with target_date -> months_left+monthly_needed and without -> null; validation 422 for target_amount<=0 and bad date; PDF 200 application/pdf starting with %PDF for both bearer header and query token, 401 without token, 422 for bad month; Google Drive export with format:pdf correctly returns 503 (not configured) — no 500). Regression on /summary, /transactions, /accounts still green. Frontend (390x844): fresh-user register → Home → goal-card empty state → goal-set-button opens goal-sheet → invalid date '99/99/2027' triggers 'Format tanggal' error toast → clearing + goal-quick-12 chip autofills date (02/10/2027) → goal-save-button → 'Target tabungan tersimpan' toast → card updates to 'Tabungan Nikah' with Rp0 saved, 0% tercapai, sisa Rp10.000.000, and tip 'Nabung sekitar Rp833.333 per bulan'. Rekap screen: label 'Oktober 2026', rekap-next-month aria-disabled=true on current, rekap-prev-month navigates to 'September 2026', all cards (rekap-month-in/out, rekap-net, rekap-trend-card with 6-month chart empty state, rekap-category-card, rekap-pdf-card) render correctly. rekap-pdf-month-button and rekap-pdf-all-button each open a new browser tab/popup (web window.open path confirmed). profil-rekap-link renders on Profil tab (verified across console log + source).",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "goal-card.tsx (Target Tabungan sheet)",
+        "issues": [
+          "On a 390x844 viewport, the goal-save-button in the bottom sheet is initially below the fold and requires scrolling inside the sheet. Users with smaller devices may miss it; consider making the sheet content scroll-aware or pinning the primary CTA. Non-blocking."
+        ]
+      }
+    ],
+    "react_native_issues": [
+      {
+        "component": "useNativeDriver",
+        "issue": "Console warning on web: 'Animated: useNativeDriver is not supported because the native animated module is missing. Falling back to JS-based animation.' Expected on web but worth noting the sheet animations rely on useNativeDriver=true. Harmless on web, native unaffected."
+      },
+      {
+        "component": "props.pointerEvents",
+        "issue": "Deprecation warning 'props.pointerEvents is deprecated. Use style.pointerEvents' — one or more RN components still pass pointerEvents as a prop (likely in UI primitives / sheet). Low priority but should be migrated to style.pointerEvents in a future pass."
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration2.py",
+    "/app/backend/tests/test_menabng_api.py",
+    "/app/test_reports/pytest/iteration2_results.xml"
+  ],
+  "action_items": [
+    "(optional) Replace deprecated `pointerEvents` prop usage with `style.pointerEvents` across RN components to silence web console warning.",
+    "(optional) Make Sheet component scroll so goal-save-button is always reachable on small viewports without manual scroll."
+  ],
+  "critical_code_review_comments": [
+    "reports.py is clean and well-structured; _goal_out correctly clamps progress to [0,1] and derives months_left using 30.44 avg days — matches spec. Date math handles target_date in the past (months becomes 0 -> monthly_needed = remaining).",
+    "report_pdf uses token query param for web popup auth — correct pattern since window.open can't send Authorization headers. Content-Disposition is 'inline' so browser previews the PDF rather than forcing download — matches 'open in new tab' UX.",
+    "/stats bounds the 6-month window and only aggregates categories for the target month — matches rekap chart.",
+    "server.py still ~700 lines (borderline). Reports/goal correctly extracted into reports.py.",
+    "FastAPI deprecation warning on @app.on_event (carryover from iter1). Non-blocking."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iteration2.py (new, 18 pytest cases)"
+  ],
+  "success_rate": {
+    "backend": "100% (18/18 iteration-2 cases; 18/18 iteration-1 regression also still green)",
+    "frontend": "100% of critical flows (goal empty→set, goal validation, goal update, rekap navigation + cards + PDF popups)"
+  },
+  "seed_data_creation": "Each pytest run registers a unique iter2_<hex> user and seeds 9 transactions across 2026-08/09/10. UI test registers a unique ui<hex> user and leaves it empty. No shared/production data touched.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend URL via EXPO_PUBLIC_BACKEND_URL. The /api/reports/pdf endpoint accepts either Bearer header or ?token= query (used by web window.open). On 390x844 Expo-web, bottom sheets require programmatic scrollIntoView to click primary CTAs. rekap-next-month uses aria-disabled='true' (not HTML disabled). Server 'today' is 2026-10-02 WIB; the 6-month stats window therefore ends at the requested month (verified).",
+  "rca_of_issue": "N/A — no bugs."
+}

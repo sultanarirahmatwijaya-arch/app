@@ -101,3 +101,14 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+## Iteration 2 — Rekap/Grafik, Target Tabungan, Rekap PDF (2026-10-02)
+Backend (new, in /app/backend/reports.py, mounted under /api):
+- GET /api/stats?month=YYYY-MM → 6-month in/out window + category breakdown for that month
+- GET/PUT/DELETE /api/goal → savings goal stored on book (title, target_amount, target_date) with progress, months_left, monthly_needed
+- GET /api/reports/pdf?month=YYYY-MM|all (Bearer or ?token=) → application/pdf
+- POST /api/integrations/google/export now accepts {month, format: "csv"|"pdf"} (Drive still not configured → 503 expected)
+Frontend:
+- Home: GoalCard (set/edit/delete goal via sheet), "Rekap & Grafik" link card
+- New screen /rekap: month nav, stats cards, monthly bar chart, category bars, PDF buttons (web opens new tab)
+- Profil: menu link to /rekap, Drive card has PDF + CSV export buttons when connected
+Test account with seeded data: stat_5914 / rahasia123

@@ -40,11 +40,18 @@ foto profil. Nama aplikasi: MenAbng. Warna natural, minimalis, tidak kontras.
   Belanja (month nav, plans, items, progress), Profil (photo, book+invite, join, drive, logout), Rekening, Catat (keypad).
 - Smoke-tested all endpoints via curl; login screen verified via screenshot.
 
+## Implemented — 2026-10-02 (Iteration 2)
+- Rekap & Grafik screen (/rekap): month navigator, 6-month income/expense bar chart, category breakdown, averages.
+- Target Tabungan on Home: goal (title, nominal, optional target date) stored on book; progress bar, sisa, saran nabung/bulan.
+- Rekap PDF (reportlab): GET /api/reports/pdf?month=YYYY-MM|all → summary, goal, trend, category bars, full transaction table.
+  Web opens new tab; native downloads via expo-file-system and shares via expo-sharing.
+- Drive export supports format csv|pdf. Fixed mobile OAuth redirect (expo-linking createURL).
+- Tested: backend 18/18 pytest (tests/test_iteration2.py), frontend flows verified by testing agent.
+
 ## Backlog / Remaining
-- P1: Activate Google Drive with real OAuth client credentials (user must supply).
+- P1: Activate Google Drive — user must supply GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET (guide given; callback URI = BACKEND_PUBLIC_URL + /api/integrations/google/callback).
 - P1: Auto-connect bank accounts (user to supply bank data later).
-- P2: Charts/trends for monthly spending.
-- P2: Export to PDF in addition to CSV.
+- P3: Catat category chips scroll affordance (minor UX).
 
 ## Next Tasks
 - Full e2e testing via testing_agent, fix any issues.

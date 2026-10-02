@@ -13,6 +13,7 @@ import { useRouter } from "expo-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
+import * as ExpoLinking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 import { API_BASE, api, uploadFile, type Book, type User } from "@/src/api";
 import { useAuth } from "@/src/auth";
@@ -116,12 +117,13 @@ export default function ProfilScreen() {
   });
 
   const exportMut = useMutation({
-    mutationFn: () =>
+    mutationFn: (format: "csv" | "pdf") =>
       api<{ file: { webViewLink?: string } }>("/integrations/google/export", {
         method: "POST",
-        body: { month: monthLabelToYm() },
+        body: { month: monthLabelToYm(), format },
       }),
-    onSuccess: () => toast.show("Rekap bulan ini terunggah ke Google Drive"),
+    onSuccess: (_d, format) =>
+      toast.show(`Rekap ${format.toUpperCase()} bulan ini terunggah ke Google Drive`),
     onError: (e: Error) => toast.show(e.message, "error"),
   });
 
@@ -176,7 +178,7 @@ export default function ProfilScreen() {
       return;
     }
     try {
-      await WebBrowser.openAuthSessionAsync(url, Linking.createURL("oauth/google"));
+      await WebBrowser.openAuthSessionAsync(url, ExpoLinking.createURL("oauth/google"));
     } catch {
       // user cancelled
     }
@@ -305,6 +307,16 @@ export default function ProfilScreen() {
             <Text style={styles.menuText}>Rekening &amp; Sumber Uang</Text>
             <Icon name="chevron-forward" size={18} color={colors.muted} />
           </Pressable>
+          <View style={{ height: 1, backgroundColor: colors.divider }} />
+          <Pressable
+            style={styles.menuRow}
+            testID="profil-rekap-link"
+            onPress={() => router.push("/rekap")}
+          >
+            <Icon name="bar-chart-outline" size={22} color={colors.brandPrimary} />
+            <Text style={styles.menuText}>Rekap, Grafik &amp; PDF</Text>
+            <Icon name="chevron-forward" size={18} color={colors.muted} />
+          </Pressable>
         </Card>
 
         <Card style={styles.driveCard} testID="profil-gdrive-card">
@@ -325,13 +337,23 @@ export default function ProfilScreen() {
               : "Belum terhubung. Hubungkan akun Google untuk menyimpan rekap otomatis."}
           </Text>
           {gdrive.data?.connected ? (
-            <Btn
-              label="Ekspor Rekap Bulan Ini"
-              icon="cloud-upload-outline"
-              testID="profil-gdrive-export-button"
-              onPress={() => exportMut.mutate()}
-              loading={exportMut.isPending}
-            />
+            <>
+              <Btn
+                label="Simpan PDF Bulan Ini ke Drive"
+                icon="document-text-outline"
+                testID="profil-gdrive-export-pdf-button"
+                onPress={() => exportMut.mutate("pdf")}
+                loading={exportMut.isPending && exportMut.variables === "pdf"}
+              />
+              <Btn
+                label="Simpan CSV Bulan Ini ke Drive"
+                icon="cloud-upload-outline"
+                variant="soft"
+                testID="profil-gdrive-export-button"
+                onPress={() => exportMut.mutate("csv")}
+                loading={exportMut.isPending && exportMut.variables === "csv"}
+              />
+            </>
           ) : (
             <Btn
               label="Hubungkan Google Drive"

@@ -661,8 +661,10 @@ async def read_file(path: str, token: Optional[str] = None, creds=Depends(models
 # Google Drive integration (backup rekap)
 # ---------------------------------------------------------------------------
 from google_drive import router as google_router  # noqa: E402
+from reports import router as reports_router  # noqa: E402
 
 api_router.include_router(google_router)
+api_router.include_router(reports_router)
 
 
 @app.on_event("startup")

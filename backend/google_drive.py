@@ -203,6 +203,7 @@ def _upload_report(refresh_token: str, folder_id: str, filename: str, content: b
 
 class ExportIn(BaseModel):
     month: str = ""
+    format: str = "csv"
 
 
 @router.post("/export")
@@ -217,12 +218,25 @@ async def google_export(body: ExportIn = Body(default=ExportIn()), user: dict = 
         raise HTTPException(409, "Hubungkan Google Drive terlebih dahulu")
     book_id = await models.require_book(user)
 
+    import re as _re
+
+    if body.month and not _re.match(r"^\d{4}-\d{2}$", body.month):
+        raise HTTPException(422, "Format bulan harus YYYY-MM")
+
+    refresh = _fernet().decrypt(token_doc["refresh_token_enc"].encode()).decode()
+    folder_id = (os.environ.get("GOOGLE_FOLDER_ID", "") or "").strip()
+
+    if body.format == "pdf":
+        from reports import render_recap_pdf
+
+        content, filename = await render_recap_pdf(user, body.month or None)
+        result = await run_in_threadpool(
+            _upload_report, refresh, folder_id, filename, content, "application/pdf"
+        )
+        return {"file": result}
+
     query = {"book_id": book_id, "deleted_at": None}
     if body.month:
-        import re as _re
-
-        if not _re.match(r"^\d{4}-\d{2}$", body.month):
-            raise HTTPException(422, "Format bulan harus YYYY-MM")
         query["date"] = {"$regex": f"^{_re.escape(body.month)}"}
 
     txs = []
@@ -247,8 +261,6 @@ async def google_export(body: ExportIn = Body(default=ExportIn()), user: dict = 
 
     filename = f"MenAbng-Rekap-{body.month or 'semua'}.csv"
     content = buf.getvalue().encode("utf-8-sig")
-    refresh = _fernet().decrypt(token_doc["refresh_token_enc"].encode()).decode()
-    folder_id = (os.environ.get("GOOGLE_FOLDER_ID", "") or "").strip()
     result = await run_in_threadpool(
         _upload_report, refresh, folder_id, filename, content, "text/csv"
     )

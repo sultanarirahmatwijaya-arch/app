@@ -39,11 +39,14 @@
       "expo-secure-store",
       [
         "expo-image-picker",
-        { "photosPermission": "Pilih foto profil untuk akun MenAbng" }
+        {
+          "photosPermission": "Pilih foto profil untuk akun MenAbng"
+        }
       ],
       "expo-web-browser",
       "expo-status-bar",
-      "@react-native-vector-icons/ionicons"
+      "@react-native-vector-icons/ionicons",
+      "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true

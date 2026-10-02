@@ -87,6 +87,29 @@ export type Summary = {
   accounts: Account[];
 };
 
+export type Stats = {
+  month: string;
+  months: { month: string; label: string; income: number; expense: number }[];
+  categories: { category: string; label: string; total: number; pct: number }[];
+  month_in: number;
+  month_out: number;
+  avg_in: number;
+  avg_out: number;
+};
+
+export type Goal = {
+  set: boolean;
+  title: string;
+  target_amount: number;
+  target_date: string | null;
+  saved: number;
+  remaining: number;
+  progress: number;
+  months_left: number | null;
+  days_left: number | null;
+  monthly_needed: number | null;
+};
+
 export async function api<T = unknown>(
   path: string,
   opts: { method?: string; body?: unknown } = {},

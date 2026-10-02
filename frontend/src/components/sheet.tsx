@@ -13,6 +13,7 @@ const useStyles = makeStyles((c) => ({
     borderTopRightRadius: 22,
     paddingTop: 12,
     paddingHorizontal: 24,
+    maxHeight: "88%",
   },
   grabber: {
     width: 40,

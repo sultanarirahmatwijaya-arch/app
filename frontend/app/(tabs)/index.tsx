@@ -1,4 +1,4 @@
-import { RefreshControl, ScrollView, Text, View } from "react-native";
+import { Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -9,10 +9,11 @@ import { greeting, rupiah } from "@/src/format";
 import { usesNativeTabs } from "@/src/navigation";
 import { makeStyles, useTheme } from "@/src/theme";
 import { Avatar, Btn, Card, EmptyState, Icon, Screen, SectionLabel } from "@/src/components/ui";
+import { GoalCard } from "@/src/components/goal-card";
 import { TxRow } from "@/src/components/tx-row";
 
 const useStyles = makeStyles((c) => ({
-  scroll: { paddingHorizontal: 24 },
+  scroll: { paddingHorizontal: 24, gap: 16 },
   header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   greeting: { color: c.muted, fontFamily: FONT.text, fontSize: 13 },
   name: { color: c.onSurface, fontFamily: FONT.display, fontSize: 22, marginTop: 2 },
@@ -42,6 +43,15 @@ const useStyles = makeStyles((c) => ({
   todayLabel: { color: c.onSurfaceSecondary, fontFamily: FONT.text, fontSize: 12 },
   todayValue: { fontFamily: FONT.textBold, fontSize: 18, marginTop: 8 },
   catatBtn: { height: 56 },
+  rekapLink: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+  },
+  rekapText: { color: c.onSurface, fontFamily: FONT.textSemi, fontSize: 15, flex: 1 },
+  rekapSub: { color: c.muted, fontFamily: FONT.text, fontSize: 12, marginTop: 2 },
   recentHeader: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   seeAll: { color: c.brandPrimary, fontFamily: FONT.textSemi, fontSize: 13 },
   card: { paddingVertical: 4, paddingHorizontal: 16 },
@@ -143,6 +153,21 @@ export default function HomeScreen() {
           onPress={() => router.push("/catat")}
           style={styles.catatBtn}
         />
+
+        <GoalCard />
+
+        <Card style={{ padding: 0 }} testID="home-rekap-card">
+          <Pressable style={styles.rekapLink} testID="home-rekap-link" onPress={() => router.push("/rekap")}>
+            <Icon name="bar-chart-outline" size={22} color={colors.brandPrimary} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.rekapText}>Rekap &amp; Grafik</Text>
+              <Text style={styles.rekapSub}>
+                Bulan ini: masuk {rupiah(summary.data?.month_in ?? 0)} · keluar {rupiah(summary.data?.month_out ?? 0)}
+              </Text>
+            </View>
+            <Icon name="chevron-forward" size={18} color={colors.muted} />
+          </Pressable>
+        </Card>
 
         <View style={styles.recentHeader}>
           <SectionLabel>Transaksi Terakhir</SectionLabel>

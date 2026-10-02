@@ -76,6 +76,8 @@ export default function RiwayatScreen() {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
       queryClient.invalidateQueries({ queryKey: ["summary"] });
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      queryClient.invalidateQueries({ queryKey: ["goal"] });
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
       toast.show("Transaksi dihapus");
       setDetail(null);
       setConfirmDelete(false);
